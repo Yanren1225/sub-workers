@@ -1,0 +1,193 @@
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: :9090
+ipv6: true
+# global-ua:
+
+profile:
+  store-selected: true
+
+dns:
+  enable: true
+  listen: :1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  fallback:
+    - 8.8.8.8
+    - 1.1.1.1
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+      - 127.0.0.0/8
+      - 0.0.0.0/32
+
+sniffer:
+  enable: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8888]
+      active: true
+    QUIC:
+      ports: [443]
+
+proxy-providers:
+  SUB:
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      lazy: false
+      interval: 300
+      url: https://www.gstatic.com/generate_204
+    proxy: DIRECT
+    url: '__SUB_URL__'
+    path: ./provider_sub.yaml
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - AUTO
+      - HK_AUTO
+      - JP_AUTO
+      - SG_AUTO
+      - USA_AUTO
+      - MANUAL
+      - DIRECT
+
+  - name: AUTO
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    lazy: false
+    initial: 0
+    interval: 300
+    tolerance: 50
+    use:
+      - SUB
+
+  - name: HK_AUTO
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    lazy: false
+    initial: 0
+    interval: 300
+    tolerance: 50
+    use:
+      - SUB
+    filter: '(?i)香港|HK|Hong Kong'
+
+  - name: JP_AUTO
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    lazy: false
+    initial: 0
+    interval: 300
+    tolerance: 50
+    use:
+      - SUB
+    filter: '(?i)日本|JP|Japan'
+
+  - name: SG_AUTO
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    lazy: false
+    initial: 0
+    interval: 300
+    tolerance: 50
+    use:
+      - SUB
+    filter: '(?i)新加坡|狮城|SG|Singapore'
+
+  - name: USA_AUTO
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    lazy: false
+    initial: 0
+    interval: 300
+    tolerance: 50
+    use:
+      - SUB
+    filter: '(?i)美国|US|United States'
+
+  - name: MANUAL
+    type: select
+    use:
+      - SUB
+
+  - name: FINAL
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+      - MANUAL
+      - AUTO
+
+rules:
+  # 自用规则
+  - RULE-SET,YanrenPrivateIP,DIRECT,no-resolve
+  - RULE-SET,YanrenDirect,DIRECT
+  - RULE-SET,YanrenProxy,PROXY
+  # 社区规则
+  - RULE-SET,Reject,REJECT
+  - RULE-SET,GFW,PROXY
+  - RULE-SET,CN_Domain,DIRECT
+  - RULE-SET,CN_IP,DIRECT,no-resolve
+  # GEO IP
+  - GEOIP,CN,DIRECT,no-resolve
+  - MATCH,FINAL
+
+rule-providers:
+  YanrenProxy:
+    type: http
+    behavior: classical
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/Proxy.yaml
+    path: ./YanrenRules/Proxy.yaml
+    interval: 3600
+  YanrenDirect:
+    type: http
+    behavior: classical
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/Direct.yaml
+    path: ./YanrenRules/Direct.yaml
+    interval: 3600
+  YanrenPrivateIP:
+    type: http
+    behavior: classical
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/PrivateIP.yaml
+    path: ./YanrenRules/PrivateIP.yaml
+    interval: 3600
+  Reject:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
+    path: ./MyRules/Adblock.yaml
+    interval: 3600
+  CN_Domain:
+    type: http
+    behavior: domain
+    url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt'
+    path: ./ruleset/direct.yaml
+    interval: 86400
+  CN_IP:
+    type: http
+    behavior: ipcidr
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cnip.txt
+    path: ./ruleset/cnip.yaml
+    interval: 86400
+  GFW:
+    type: http
+    behavior: domain
+    url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt'
+    path: ./ruleset/gfw.yaml
+    interval: 86400
