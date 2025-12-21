@@ -185,7 +185,7 @@ rule-providers:
   CN_IP:
     type: http
     behavior: ipcidr
-    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cnip.txt
+    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt
     path: ./ruleset/cnip.txt
     interval: 86400
   GFW:
