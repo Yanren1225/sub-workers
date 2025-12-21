@@ -153,25 +153,25 @@ rule-providers:
     type: http
     behavior: classical
     url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/Proxy.yaml
-    path: ./YanrenRules/Proxy.yaml
+    path: ./ruleset/YanrenProxy.yaml
     interval: 3600
   YanrenDirect:
     type: http
     behavior: classical
     url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/Direct.yaml
-    path: ./YanrenRules/Direct.yaml
+    path: ./ruleset/YanrenDirect.yaml
     interval: 3600
   YanrenPrivateIP:
     type: http
     behavior: classical
     url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/PrivateIP.yaml
-    path: ./YanrenRules/PrivateIP.yaml
+    path: ./ruleset/YanrenPrivateIP.yaml
     interval: 3600
   Reject:
     type: http
     behavior: domain
     url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
-    path: ./MyRules/Adblock.yaml
+    path: ./ruleset/Adblock.yaml
     interval: 3600
   CN_Domain:
     type: http

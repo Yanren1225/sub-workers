@@ -1,4 +1,5 @@
 import clashTemplate from './clash.yaml';
+import yaml from 'js-yaml';
 
 enum AllowedPaths {
   CLASH = 'clash',
@@ -20,42 +21,75 @@ export default {
 
     let config = '';
     let contextType = 'text/plain; charset=utf-8';
+    let headers: Record<string, string> = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+    };
 
     if (path === AllowedPaths.CLASH) {
-      config = clashTemplate;
+      const { config: parsedConfig, headers: subHeaders } = await parseClashConfig(REAL_SUB_URL);
+      config = parsedConfig;
       contextType = 'application/x-yaml; charset=utf-8';
+
+      /// 处理剩余流量等信息
+      const trafficHeaders = ['subscription-userinfo', 'profile-update-interval', 'profile-web-page-url'];
+
+      trafficHeaders.forEach((header) => {
+        const value = subHeaders.get(header);
+        if (value) {
+          headers[header] = value;
+        }
+      });
     } else {
       return new Response(`Path ${url.pathname} not found, Use ${Object.values(AllowedPaths).join(', ')}`, { status: 404 });
     }
 
-    config = config.replace('__SUB_URL__', REAL_SUB_URL);
+    headers['Content-Type'] = isBrowser ? 'text/plain; charset=utf-8' : contextType;
 
-    const headers: Record<string, string> = {
-      'Content-Type': isBrowser ? 'text/plain; charset=utf-8' : contextType,
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-    };
-
-    /// 浏览器的话就直接浏览了
+    // 浏览器的话就直接浏览了
     if (!isBrowser) {
       headers['Content-Disposition'] = `attachment; filename=${path}`;
     }
 
-    const subResponse = await fetch(REAL_SUB_URL, {
-      headers: {
-        'User-Agent': 'clash-verge',
-      },
-    });
-
-    /// 处理剩余流量等信息
-    const trafficHeaders = ['subscription-userinfo', 'content-disposition', 'profile-update-interval', 'profile-web-page-url'];
-
-    trafficHeaders.forEach((header) => {
-      const value = subResponse.headers.get(header);
-      if (value) {
-        headers[header] = value;
-      }
-    });
-
     return new Response(config, { headers });
   },
 } satisfies ExportedHandler<Env>;
+
+const parseClashConfig = async (REAL_SUB_URL: string) => {
+  const subResponse = await fetch(REAL_SUB_URL, {
+    headers: {
+      'User-Agent': 'clash-verge',
+    },
+  });
+
+  const subContent = await subResponse.text();
+  const subConfig = yaml.load(subContent) as any;
+
+  const templateConfig = yaml.load(clashTemplate) as any;
+
+  templateConfig['proxies'] = subConfig['proxies'] || [];
+
+  const proxyNames = templateConfig['proxies'].map((proxy: any) => proxy.name);
+
+  const updatedProxyGroups = templateConfig['proxy-groups'].map((group: any) => {
+    if (group.use) {
+      delete group.use;
+
+      // 根据 filter 过滤节点
+      if (group.filter) {
+        const pattern = group.filter.replace(/\(\?i\)/g, '');
+        const regex = new RegExp(pattern);
+        group.proxies = proxyNames.filter((name: string) => regex.test(name));
+      } else {
+        // 没有 filter 就使用所有节点
+        group.proxies = [...proxyNames];
+      }
+    }
+    return group;
+  });
+
+  templateConfig['proxy-groups'] = updatedProxyGroups;
+
+  delete templateConfig['proxy-providers'];
+
+  return { config: yaml.dump(templateConfig), headers: subResponse.headers };
+};
