@@ -13,7 +13,7 @@
   "rules": [
     {
       "type": "Text",
-      "globs": ["*.yaml"],
+      "globs": ["*.yaml", "*.yml", "*.conf"],
       "fallthrough": true
     }
   ]

@@ -152,42 +152,45 @@ rule-providers:
   YanrenProxy:
     type: http
     behavior: classical
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/Proxy.yaml
-    path: ./ruleset/YanrenProxy.yaml
+    format: text
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Proxy.txt
+    path: ./ruleset/YanrenProxy.txt
     interval: 3600
   YanrenDirect:
     type: http
     behavior: classical
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/Direct.yaml
-    path: ./ruleset/YanrenDirect.yaml
+    format: text
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Direct.txt
+    path: ./ruleset/YanrenDirect.txt
     interval: 3600
   YanrenPrivateIP:
     type: http
     behavior: classical
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Clash/PrivateIP.yaml
-    path: ./ruleset/YanrenPrivateIP.yaml
+    format: text
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/PrivateIP.txt
+    path: ./ruleset/YanrenPrivateIP.txt
     interval: 3600
   Reject:
     type: http
     behavior: domain
     url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
-    path: ./ruleset/Adblock.yaml
+    path: ./ruleset/Adblock.txt
     interval: 3600
   CN_Domain:
     type: http
     behavior: domain
     url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt'
-    path: ./ruleset/direct.yaml
+    path: ./ruleset/direct.txt
     interval: 86400
   CN_IP:
     type: http
     behavior: ipcidr
     url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cnip.txt
-    path: ./ruleset/cnip.yaml
+    path: ./ruleset/cnip.txt
     interval: 86400
   GFW:
     type: http
     behavior: domain
     url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt'
-    path: ./ruleset/gfw.yaml
+    path: ./ruleset/gfw.txt
     interval: 86400
