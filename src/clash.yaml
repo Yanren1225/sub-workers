@@ -126,6 +126,13 @@ proxy-groups:
     use:
       - SUB
 
+  - name: BLOCK
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+      - PROXY
+
   - name: FINAL
     type: select
     proxies:
@@ -137,10 +144,11 @@ rules:
   - RULE-SET,YanrenPrivateIP,DIRECT,no-resolve
   - RULE-SET,YanrenDirect,DIRECT
   - RULE-SET,YanrenProxy,PROXY
+  - RULE-SET,YanrenReject,BLOCK
   # 社区规则
   - RULE-SET,CN_Domain,DIRECT
   - RULE-SET,CN_IP,DIRECT,no-resolve
-  - RULE-SET,Reject,REJECT
+  - RULE-SET,Reject,BLOCK
   - RULE-SET,GFW,PROXY
   - RULE-SET,Telegram,PROXY
   # GEO IP
@@ -168,6 +176,13 @@ rule-providers:
     format: text
     url: https://github.com/Yanren1225/rules/raw/refs/heads/main/PrivateIP.txt
     path: ./ruleset/YanrenPrivateIP.txt
+    interval: 3600
+  YanrenReject:
+    type: http
+    behavior: classical
+    format: text
+    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Reject.txt
+    path: ./ruleset/YanrenReject.txt
     interval: 3600
   Reject:
     type: http
