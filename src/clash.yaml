@@ -52,7 +52,7 @@ proxy-providers:
       interval: 300
       url: https://www.gstatic.com/generate_204
     proxy: DIRECT
-    url: '__SUB_URL__'
+    url: "__SUB_URL__"
     path: ./provider_sub.yaml
 
 proxy-groups:
@@ -86,7 +86,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)香港|HK|Hong Kong'
+    filter: "(?i)香港|HK|Hong Kong"
 
   - name: JP_AUTO
     type: url-test
@@ -97,7 +97,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)日本|JP|Japan'
+    filter: "(?i)日本|JP|Japan"
 
   - name: SG_AUTO
     type: url-test
@@ -108,7 +108,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)新加坡|狮城|SG|Singapore'
+    filter: "(?i)新加坡|狮城|SG|Singapore"
 
   - name: USA_AUTO
     type: url-test
@@ -119,7 +119,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)美国|US|United States'
+    filter: "(?i)美国|US|United States"
 
   - name: MANUAL
     type: select
@@ -129,10 +129,8 @@ proxy-groups:
   - name: FINAL
     type: select
     proxies:
-      - PROXY
       - DIRECT
-      - MANUAL
-      - AUTO
+      - PROXY
 
 rules:
   # 自用规则
@@ -140,10 +138,11 @@ rules:
   - RULE-SET,YanrenDirect,DIRECT
   - RULE-SET,YanrenProxy,PROXY
   # 社区规则
-  - RULE-SET,Reject,REJECT
-  - RULE-SET,GFW,PROXY
   - RULE-SET,CN_Domain,DIRECT
   - RULE-SET,CN_IP,DIRECT,no-resolve
+  - RULE-SET,Reject,REJECT
+  - RULE-SET,GFW,PROXY
+  - RULE-SET,Telegram,PROXY
   # GEO IP
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,FINAL
@@ -179,7 +178,7 @@ rule-providers:
   CN_Domain:
     type: http
     behavior: domain
-    url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt'
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt"
     path: ./ruleset/direct.txt
     interval: 86400
   CN_IP:
@@ -191,6 +190,12 @@ rule-providers:
   GFW:
     type: http
     behavior: domain
-    url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt'
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
     path: ./ruleset/gfw.txt
+    interval: 86400
+  Telegram:
+    type: http
+    behavior: ipcidr
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt"
+    path: ./ruleset/telegramcidr.yaml
     interval: 86400
