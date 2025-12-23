@@ -136,8 +136,8 @@ proxy-groups:
   - name: FINAL
     type: select
     proxies:
-      - DIRECT
       - PROXY
+      - DIRECT
 
 rules:
   # 自用规则
