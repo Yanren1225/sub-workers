@@ -9,11 +9,15 @@ ipv6: true
 profile:
   store-selected: true
 
+geodata-mode: true
+geox-url:
+  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
+  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
 dns:
   enable: true
   ipv6: true
   prefer-h3: true
-  listen: :53
+  listen: ":53"
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
@@ -26,21 +30,24 @@ dns:
   nameserver:
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
+    - tls://1.1.1.1
     - tls://8.8.4.4
   fake-ip-filter:
-    - '*.lan'
-    - '*.local'
-    - 'localhost.ptlogin2.qq.com'
-    - 'www.msftconnecttest.com'
-    - 'time.*.com'
-    - '*.msftncsi.com'
+    - "*.lan"
+    - "*.local"
+    - localhost.ptlogin2.qq.com
+    - www.msftconnecttest.com
+    - time.*.com
+    - "*.msftncsi.com"
   nameserver-policy:
-    geosite:cn,apple,category-games@cn,private:
+    geosite:cn,private: &cn_dns
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
       - 119.29.29.29
       - 223.5.5.5
       - system
+    geosite:apple,microsoft@cn: *cn_dns
+    geosite:category-games@cn: *cn_dns
 
 sniffer:
   enable: true
@@ -65,7 +72,7 @@ proxy-providers:
       interval: 300
       url: https://www.gstatic.com/generate_204
     proxy: DIRECT
-    url: '__SUB_URL__'
+    url: "__SUB_URL__"
     path: ./provider_sub.yaml
 
 proxy-groups:
@@ -99,7 +106,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)香港|HK|Hong Kong'
+    filter: "(?i)香港|HK|Hong Kong"
 
   - name: JP_AUTO
     type: url-test
@@ -110,7 +117,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)日本|JP|Japan'
+    filter: "(?i)日本|JP|Japan"
 
   - name: SG_AUTO
     type: url-test
@@ -121,7 +128,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)新加坡|狮城|SG|Singapore'
+    filter: "(?i)新加坡|狮城|SG|Singapore"
 
   - name: USA_AUTO
     type: url-test
@@ -132,7 +139,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)美国|US|United States'
+    filter: "(?i)美国|US|United States"
 
   - name: MANUAL
     type: select
@@ -206,7 +213,7 @@ rule-providers:
   CN_Domain:
     type: http
     behavior: domain
-    url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt'
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt"
     path: ./ruleset/direct.txt
     interval: 86400
   CN_IP:
@@ -218,12 +225,12 @@ rule-providers:
   GFW:
     type: http
     behavior: domain
-    url: 'https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt'
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
     path: ./ruleset/gfw.txt
     interval: 86400
   Telegram:
     type: http
     behavior: ipcidr
-    url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt'
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt"
     path: ./ruleset/telegramcidr.yaml
     interval: 86400
