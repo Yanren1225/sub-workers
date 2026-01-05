@@ -11,13 +11,40 @@ profile:
 
 geodata-mode: true
 geox-url:
-  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
-  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
+  geoip: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.dat'
+  geosite: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat'
+  mmdb: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb'
+
+tun:
+  enable: true
+  stack: mixed
+  device: mihomo-tun
+  auto-route: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+  strict-route: true
+  mtu: 1500
+  gso: true
+  gso-max-size: 65536
+  udp-timeout: 300
+  exclude-interface:
+    - Tailscale
+  route-exclude-address-set:
+  # route-exclude-address:
+  #   - '100.64.0.0/10'
+  #   - fd7a:115c:a1e0::/48
+  # inet4_route_address:
+  #   - 0.0.0.0/1
+  #   - 128.0.0.0/1
+  # inet6_route_address:
+  #   - '::/1'
+  #   - '8000::/1'
 dns:
   enable: true
   ipv6: true
   prefer-h3: true
-  listen: ":53"
+  listen: ':53'
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
@@ -39,12 +66,16 @@ dns:
     - https://223.5.5.5/dns-query
     - https://doh.360.cn/dns-query
   fake-ip-filter:
-    - "*.lan"
-    - "*.local"
+    - geosite:fakeip-filter
+    - '*.lan'
+    - '*.local'
+    - '+.market.xiaomi.com'
+    - '+.msftconnecttest.com'
+    - '+.msftncsi.com'
     - localhost.ptlogin2.qq.com
     - www.msftconnecttest.com
     - time.*.com
-    - "*.msftncsi.com"
+    - '*.msftncsi.com'
   nameserver-policy:
     geosite:cn,private: &cn_dns
       - https://doh.pub/dns-query
@@ -52,8 +83,8 @@ dns:
       - 119.29.29.29
       - 223.5.5.5
       - system
-    geosite:apple,microsoft@cn: *cn_dns
-    geosite:category-games@cn: *cn_dns
+    geosite:apple-cn,microsoft-cn: *cn_dns
+    geosite:games-cn: *cn_dns
 
 sniffer:
   enable: true
@@ -74,11 +105,11 @@ proxy-providers:
     interval: 86400
     health-check:
       enable: true
-      lazy: false
-      interval: 300
+      lazy: true
+      interval: 1200
       url: https://www.gstatic.com/generate_204
     proxy: DIRECT
-    url: "__SUB_URL__"
+    url: '__SUB_URL__'
     path: ./provider_sub.yaml
 
 proxy-groups:
@@ -95,57 +126,57 @@ proxy-groups:
 
   - name: AUTO
     type: url-test
-    url: http://www.gstatic.com/generate_204
-    lazy: false
+    url: https://www.gstatic.com/generate_204
+    lazy: true
     initial: 0
-    interval: 300
+    interval: 1200
     tolerance: 50
     use:
       - SUB
 
   - name: HK_AUTO
     type: url-test
-    url: http://www.gstatic.com/generate_204
-    lazy: false
+    url: https://www.gstatic.com/generate_204
+    lazy: true
     initial: 0
-    interval: 300
+    interval: 1200
     tolerance: 50
     use:
       - SUB
-    filter: "(?i)香港|HK|Hong Kong"
+    filter: '(?i)香港|HK|Hong Kong'
 
   - name: JP_AUTO
     type: url-test
-    url: http://www.gstatic.com/generate_204
-    lazy: false
+    url: https://www.gstatic.com/generate_204
+    lazy: true
     initial: 0
-    interval: 300
+    interval: 1200
     tolerance: 50
     use:
       - SUB
-    filter: "(?i)日本|JP|Japan"
+    filter: '(?i)日本|JP|Japan'
 
   - name: SG_AUTO
     type: url-test
-    url: http://www.gstatic.com/generate_204
-    lazy: false
+    url: https://www.gstatic.com/generate_204
+    lazy: true
     initial: 0
-    interval: 300
+    interval: 1200
     tolerance: 50
     use:
       - SUB
-    filter: "(?i)新加坡|狮城|SG|Singapore"
+    filter: '(?i)新加坡|狮城|SG|Singapore'
 
   - name: USA_AUTO
     type: url-test
-    url: http://www.gstatic.com/generate_204
-    lazy: false
+    url: https://www.gstatic.com/generate_204
+    lazy: true
     initial: 0
-    interval: 300
+    interval: 1200
     tolerance: 50
     use:
       - SUB
-    filter: "(?i)美国|US|United States"
+    filter: '(?i)美国|US|United States'
 
   - name: MANUAL
     type: select
@@ -172,11 +203,13 @@ rules:
   - RULE-SET,YanrenProxy,PROXY
   - RULE-SET,YanrenReject,BLOCK
   # 社区规则
-  - RULE-SET,CN_Domain,DIRECT
+  - RULE-SET,CN,DIRECT
   - RULE-SET,CN_IP,DIRECT,no-resolve
-  - RULE-SET,Reject,BLOCK
-  - RULE-SET,GFW,PROXY
-  - RULE-SET,Telegram,PROXY
+  - RULE-SET,GAMES_CN,DIRECT
+  - RULE-SET,APPLE_CN,DIRECT
+  - RULE-SET,MICROSOFT_CN,DIRECT
+  - RULE-SET,TELEGRAM,PROXY
+  - RULE-SET,PROXY,PROXY
   # GEO IP
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,FINAL
@@ -186,57 +219,77 @@ rule-providers:
     type: http
     behavior: classical
     format: text
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Proxy.txt
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/Proxy.txt
     path: ./ruleset/YanrenProxy.txt
     interval: 3600
   YanrenDirect:
     type: http
     behavior: classical
     format: text
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Direct.txt
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/Direct.txt
     path: ./ruleset/YanrenDirect.txt
     interval: 3600
   YanrenPrivateIP:
     type: http
     behavior: classical
     format: text
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/PrivateIP.txt
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/PrivateIP.txt
     path: ./ruleset/YanrenPrivateIP.txt
     interval: 3600
   YanrenReject:
     type: http
     behavior: classical
     format: text
-    url: https://github.com/Yanren1225/rules/raw/refs/heads/main/Reject.txt
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/Reject.txt
     path: ./ruleset/YanrenReject.txt
     interval: 3600
-  Reject:
+
+  CN:
     type: http
     behavior: domain
-    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
-    path: ./ruleset/Adblock.txt
-    interval: 3600
-  CN_Domain:
-    type: http
-    behavior: domain
-    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt"
-    path: ./ruleset/direct.txt
+    format: mrs
+    path: ./ruleset/cn.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs'
     interval: 86400
   CN_IP:
     type: http
     behavior: ipcidr
-    url: https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt
-    path: ./ruleset/cnip.txt
+    format: mrs
+    path: ./ruleset/cnip.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs'
     interval: 86400
-  GFW:
+  GAMES_CN:
     type: http
     behavior: domain
-    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
-    path: ./ruleset/gfw.txt
+    format: mrs
+    path: ./ruleset/games-cn.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs'
     interval: 86400
-  Telegram:
+  APPLE_CN:
+    type: http
+    behavior: domain
+    format: mrs
+    path: ./ruleset/apple-cn.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs'
+    interval: 86400
+  PROXY:
+    type: http
+    behavior: domain
+    format: mrs
+    path: ./ruleset/proxy.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs'
+    interval: 86400
+  MICROSOFT_CN:
+    type: http
+    behavior: domain
+    format: mrs
+    path: ./ruleset/microsoft-cn.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs'
+    interval: 86400
+  TELEGRAM:
     type: http
     behavior: ipcidr
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt"
-    path: ./ruleset/telegramcidr.yaml
+    format: mrs
+    path: ./ruleset/telegramip.mrs
+    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs'
     interval: 86400
