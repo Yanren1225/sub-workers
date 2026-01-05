@@ -14,6 +14,7 @@ geox-url:
   geoip: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.dat'
   geosite: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat'
   mmdb: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb'
+  asn: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN.mmdb'
 
 tun:
   enable: true
