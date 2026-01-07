@@ -61,6 +61,9 @@ dns:
     - https://dns.google/dns-query
     - tls://1.1.1.1
     - tls://8.8.4.4
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
   direct-nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
