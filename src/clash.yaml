@@ -236,28 +236,28 @@ rule-providers:
     type: http
     behavior: classical
     format: text
-    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/Proxy.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/Proxy.txt
     path: ./ruleset/YanrenProxy.txt
     interval: 3600
   YanrenDirect:
     type: http
     behavior: classical
     format: text
-    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/Direct.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/Direct.txt
     path: ./ruleset/YanrenDirect.txt
     interval: 3600
   YanrenPrivateIP:
     type: http
     behavior: classical
     format: text
-    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/PrivateIP.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/PrivateIP.txt
     path: ./ruleset/YanrenPrivateIP.txt
     interval: 3600
   YanrenReject:
     type: http
     behavior: classical
     format: text
-    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/Reject.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/Reject.txt
     path: ./ruleset/YanrenReject.txt
     interval: 3600
 
