@@ -70,11 +70,11 @@ dns:
     - https://223.5.5.5/dns-query
     - https://doh.360.cn/dns-query
   fake-ip-filter:
-    - rule-set:FAKEIP_FILTER
-    - '*.ts.net'
-    - '*.tailscale.net'
-    - '*.lan'
-    - '*.local'
+    - rule-set:fakeip-filter
+    - '+.ts.net'
+    - '+.tailscale.net'
+    - '+.lan'
+    - '+.local'
     - '+.market.xiaomi.com'
     - '+.msftconnecttest.com'
     - '+.msftncsi.com'
@@ -83,13 +83,13 @@ dns:
     - time.*.com
     - '*.msftncsi.com'
   nameserver-policy:
-    rule-set:YanrenDirect: &cn_dns
+    rule-set:yanren-direct: &cn_dns
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
       - 119.29.29.29
       - 223.5.5.5
       - system
-    rule-set:CN,GAMES_CN,APPLE_CN,MICROSOFT_CN: *cn_dns
+    rule-set:cn,game-cn,apple-cn,microsoft-cn: *cn_dns
     '*.ts.net':
       - 100.100.100.100
     '*.tailscale.net':
@@ -207,118 +207,113 @@ proxy-groups:
 
 rules:
   # 自用规则
-  - RULE-SET,YanrenPrivateIP,DIRECT,no-resolve
-  - RULE-SET,YanrenDirect,DIRECT
-  - RULE-SET,YanrenProxy,PROXY
-  - RULE-SET,YanrenReject,BLOCK
+  - RULE-SET,yanren-private-ip,DIRECT,no-resolve
+  - RULE-SET,yanren-reject,BLOCK
+  - RULE-SET,yanren-direct,DIRECT
+  - RULE-SET,yanren-proxy,PROXY
   # 社区规则
-  - RULE-SET,PRIVATE_IP,DIRECT,no-resolve
-  - RULE-SET,CN,DIRECT
-  - RULE-SET,CN_IP,DIRECT,no-resolve
-  - RULE-SET,GAMES_CN,DIRECT
-  - RULE-SET,APPLE_CN,DIRECT
-  - RULE-SET,MICROSOFT_CN,DIRECT
-  - RULE-SET,TELEGRAM,PROXY
-  - RULE-SET,PROXY,PROXY
-  # GEO SITE
-  # - GEOSITE,games-cn,DIRECT
-  # - GEOSITE,apple-cn,DIRECT
-  # - GEOSITE,microsoft-cn,DIRECT
-  # - GEOSITE,cn,DIRECT
+  - RULE-SET,private-ip,DIRECT,no-resolve
+  - RULE-SET,cn,DIRECT
+  - RULE-SET,cn-ip,DIRECT,no-resolve
+  - RULE-SET,game-cn,DIRECT
+  - RULE-SET,apple-cn,DIRECT
+  - RULE-SET,microsoft-cn,DIRECT
+  - RULE-SET,telegram,PROXY
+  - RULE-SET,proxy,PROXY
   # GEO IP
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,FINAL
 
 rule-providers:
-  YanrenProxy:
+  yanren-proxy:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/Proxy.txt
-    path: ./ruleset/YanrenProxy.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/proxy.list
+    path: ./ruleset/yanren-proxy.list
     interval: 3600
-  YanrenDirect:
+  yanren-direct:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/Direct.txt
-    path: ./ruleset/YanrenDirect.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/direct.list
+    path: ./ruleset/yanren-direct.list
     interval: 3600
-  YanrenPrivateIP:
+  yanren-private-ip:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/PrivateIP.txt
-    path: ./ruleset/YanrenPrivateIP.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/private-ip.list
+    path: ./ruleset/yanren-private-ip.list
     interval: 3600
-  YanrenReject:
+  yanren-reject:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/Reject.txt
-    path: ./ruleset/YanrenReject.txt
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/reject.list
+    path: ./ruleset/yanren-reject.list
     interval: 3600
 
-  CN:
+  cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/cn.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs'
     interval: 86400
-  CN_IP:
+  cn-ip:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/cnip.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs'
     interval: 86400
-  GAMES_CN:
+  game-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/games-cn.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs'
     interval: 86400
-  APPLE_CN:
+  apple-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/apple-cn.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs'
     interval: 86400
-  PROXY:
+  proxy:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/proxy.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs'
     interval: 86400
-  MICROSOFT_CN:
+  microsoft-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/microsoft-cn.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs'
     interval: 86400
-  TELEGRAM:
+  telegram:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/telegramip.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs'
     interval: 86400
-  FAKEIP_FILTER:
+  fakeip-filter:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/fakeip-filter.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs'
     interval: 86400
-  PRIVATE_IP:
+  private-ip:
     type: http
     behavior: ipcidr
     format: mrs
-    path: ./ruleset/privateip.mrs
+    path: ./ruleset/private-ip.mrs
     url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs'
     interval: 86400
