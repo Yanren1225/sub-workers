@@ -64,19 +64,13 @@ dns:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
   fake-ip-filter:
+    - rule-set:yanren-private
+    - rule-set:private
     - rule-set:fakeip-filter
-    - "+.ts.net"
-    - "+.tailscale.net"
-    - "+.lan"
-    - "+.local"
-    - "+.market.xiaomi.com"
-    - "+.msftconnecttest.com"
-    - "+.msftncsi.com"
-    - localhost.ptlogin2.qq.com
-    - www.msftconnecttest.com
-    - time.*.com
-    - "*.msftncsi.com"
   nameserver-policy:
+    rule-set:yanren-private: system
+    rule-set:private: system
+
     rule-set:yanren-direct: &cn_dns
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
@@ -201,11 +195,13 @@ proxy-groups:
 
 rules:
   # 自用规则
+  - RULE-SET,yanren-private,DIRECT
   - RULE-SET,yanren-private-ip,DIRECT,no-resolve
   - RULE-SET,yanren-reject,BLOCK
   - RULE-SET,yanren-direct,DIRECT
   - RULE-SET,yanren-proxy,PROXY
   # 社区规则
+  - RULE-SET,private,DIRECT
   - RULE-SET,private-ip,DIRECT,no-resolve
   - RULE-SET,cn,DIRECT
   - RULE-SET,cn-ip,DIRECT,no-resolve
@@ -239,6 +235,13 @@ rule-providers:
     format: text
     url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/private-ip.list
     path: ./ruleset/yanren-private-ip.list
+    interval: 3600
+  yanren-private:
+    type: http
+    behavior: classical
+    format: text
+    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/private.list
+    path: ./ruleset/yanren-private.list
     interval: 3600
   yanren-reject:
     type: http
@@ -310,4 +313,11 @@ rule-providers:
     format: mrs
     path: ./ruleset/private-ip.mrs
     url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs"
+    interval: 86400
+  private:
+    type: http
+    behavior: domain
+    format: mrs
+    path: ./ruleset/private.mrs
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs"
     interval: 86400
