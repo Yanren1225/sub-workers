@@ -10,10 +10,10 @@ profile:
 
 geodata-mode: true
 geox-url:
-  geoip: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.dat'
-  geosite: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat'
-  mmdb: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb'
-  asn: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN.mmdb'
+  geoip: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.dat"
+  geosite: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat"
+  mmdb: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb"
+  asn: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN.mmdb"
 
 tun:
   enable: true
@@ -33,7 +33,7 @@ tun:
   # route-exclude-address-set:
   route-exclude-address:
     # Tailscale IP
-    - '100.64.0.0/10'
+    - "100.64.0.0/10"
     - fd7a:115c:a1e0::/48
   # inet4_route_address:
   #   - 0.0.0.0/1
@@ -45,7 +45,7 @@ dns:
   enable: true
   ipv6: true
   prefer-h3: true
-  listen: ':53'
+  listen: ":53"
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
@@ -59,40 +59,34 @@ dns:
   nameserver:
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
-    - tls://1.1.1.1
-    - tls://8.8.4.4
+    - https://dns.sb/dns-query
   proxy-server-nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
-  direct-nameserver:
-    - https://doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
-    - https://223.5.5.5/dns-query
-    - https://doh.360.cn/dns-query
   fake-ip-filter:
     - rule-set:fakeip-filter
-    - '+.ts.net'
-    - '+.tailscale.net'
-    - '+.lan'
-    - '+.local'
-    - '+.market.xiaomi.com'
-    - '+.msftconnecttest.com'
-    - '+.msftncsi.com'
+    - "+.ts.net"
+    - "+.tailscale.net"
+    - "+.lan"
+    - "+.local"
+    - "+.market.xiaomi.com"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
     - localhost.ptlogin2.qq.com
     - www.msftconnecttest.com
     - time.*.com
-    - '*.msftncsi.com'
+    - "*.msftncsi.com"
   nameserver-policy:
     rule-set:yanren-direct: &cn_dns
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
-      - 119.29.29.29
-      - 223.5.5.5
-      - system
-    rule-set:cn,game-cn,apple-cn,microsoft-cn: *cn_dns
-    '*.ts.net':
+    rule-set:cn: *cn_dns
+    rule-set:game-cn: *cn_dns
+    rule-set:apple-cn: *cn_dns
+    rule-set:microsoft-cn: *cn_dns
+    "*.ts.net":
       - 100.100.100.100
-    '*.tailscale.net':
+    "*.tailscale.net":
       - 100.100.100.100
 
 sniffer:
@@ -118,7 +112,7 @@ proxy-providers:
       interval: 1200
       url: https://www.gstatic.com/generate_204
     proxy: DIRECT
-    url: '__SUB_URL__'
+    url: "__SUB_URL__"
     path: ./provider_sub.yaml
 
 proxy-groups:
@@ -152,7 +146,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)香港|HK|Hong Kong'
+    filter: "(?i)香港|HK|Hong Kong"
 
   - name: JP_AUTO
     type: url-test
@@ -163,7 +157,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)日本|JP|Japan'
+    filter: "(?i)日本|JP|Japan"
 
   - name: SG_AUTO
     type: url-test
@@ -174,7 +168,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)新加坡|狮城|SG|Singapore'
+    filter: "(?i)新加坡|狮城|SG|Singapore"
 
   - name: USA_AUTO
     type: url-test
@@ -185,7 +179,7 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
-    filter: '(?i)美国|US|United States'
+    filter: "(?i)美国|US|United States"
 
   - name: MANUAL
     type: select
@@ -259,61 +253,61 @@ rule-providers:
     behavior: domain
     format: mrs
     path: ./ruleset/cn.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs"
     interval: 86400
   cn-ip:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/cnip.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs"
     interval: 86400
   game-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/games-cn.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs"
     interval: 86400
   apple-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/apple-cn.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs"
     interval: 86400
   proxy:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/proxy.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs"
     interval: 86400
   microsoft-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/microsoft-cn.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs"
     interval: 86400
   telegram:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/telegramip.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs"
     interval: 86400
   fakeip-filter:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/fakeip-filter.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs"
     interval: 86400
   private-ip:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/private-ip.mrs
-    url: 'https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs'
+    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs"
     interval: 86400
