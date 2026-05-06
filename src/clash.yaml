@@ -114,6 +114,7 @@ proxy-groups:
     type: select
     proxies:
       - AUTO
+      - 0.1x_AUTO
       - HK_AUTO
       - JP_AUTO
       - SG_AUTO
@@ -130,6 +131,17 @@ proxy-groups:
     tolerance: 50
     use:
       - SUB
+
+  - name: 0.1x_AUTO
+    type: url-test
+    url: https://www.gstatic.com/generate_204
+    lazy: true
+    initial: 0
+    interval: 1200
+    tolerance: 50
+    use:
+      - SUB
+    filter: "(?i)0\\.1\\s*x|0\\.1\\s*倍|0\\.1\\s*倍率"
 
   - name: HK_AUTO
     type: url-test

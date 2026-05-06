@@ -1,10 +1,8 @@
 import clashTemplate from './clash.yaml';
-import loonTemplate from './loon.conf';
 import yaml from 'js-yaml';
 
 enum AllowedPaths {
   CLASH = 'clash',
-  LOON = 'loon',
 }
 
 export default {
@@ -41,9 +39,6 @@ export default {
           headers[header] = value;
         }
       });
-    } else if (path === AllowedPaths.LOON) {
-      config = await parseLoonConfig(REAL_SUB_URL);
-      contextType = 'text/plain; charset=utf-8';
     } else {
       return new Response(`Path ${url.pathname} not found, Use ${Object.values(AllowedPaths).join(', ')}`, { status: 404 });
     }
@@ -97,13 +92,4 @@ const parseClashConfig = async (REAL_SUB_URL: string) => {
   delete templateConfig['proxy-providers'];
 
   return { config: yaml.dump(templateConfig), headers: subResponse.headers };
-};
-
-const parseLoonConfig = async (REAL_SUB_URL: string) => {
-  // 构建 Loon 配置
-  let config = loonTemplate;
-
-  config = config.replace('__SUB__', REAL_SUB_URL);
-
-  return config;
 };
