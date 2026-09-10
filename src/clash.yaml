@@ -7,13 +7,19 @@ ipv6: true
 
 profile:
   store-selected: true
+  store-fake-ip: true
 
 geodata-mode: true
 geox-url:
-  geoip: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geoip-all.dat"
-  geosite: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/geosite-all.dat"
-  mmdb: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-all.mmdb"
-  asn: "https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-geodata/Country-ASN.mmdb"
+  geoip: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-geodata/geoip-all.dat"
+  geosite: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-geodata/geosite-all.dat"
+  mmdb: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-geodata/Country-all.mmdb"
+  asn: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-geodata/Country-ASN.mmdb"
+
+tcp-concurrent: true
+unified-delay: true
+keep-alive-idle: 15
+keep-alive-interval: 15
 
 tun:
   enable: true
@@ -44,12 +50,10 @@ tun:
 dns:
   enable: true
   ipv6: true
-  prefer-h3: true
   listen: ":53"
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
-  direct-nameserver-follow-policy: true
   default-nameserver:
     - system
     - 119.29.29.29
@@ -57,9 +61,9 @@ dns:
     - 2400:3200::1
     - 2402:4e00:3200::b
   nameserver:
-    - https://cloudflare-dns.com/dns-query
-    - https://dns.google/dns-query
-    - https://dns.sb/dns-query
+    - https://cloudflare-dns.com/dns-query#PROXY
+    - https://dns.google/dns-query#PROXY
+    - https://dns.sb/dns-query#PROXY
   proxy-server-nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
@@ -78,6 +82,7 @@ dns:
     rule-set:game-cn: *cn_dns
     rule-set:apple-cn: *cn_dns
     rule-set:microsoft-cn: *cn_dns
+    rule-set:fakeip-filter: *cn_dns
     "*.ts.net":
       - 100.100.100.100
     "*.tailscale.net":
@@ -103,8 +108,8 @@ proxy-providers:
     health-check:
       enable: true
       lazy: true
-      interval: 1200
-      url: https://www.gstatic.com/generate_204
+      interval: 600
+      url: http://cp.cloudflare.com/generate_204
     proxy: DIRECT
     url: "__SUB_URL__"
     path: ./provider_sub.yaml
@@ -119,76 +124,92 @@ proxy-groups:
       - JP_AUTO
       - SG_AUTO
       - USA_AUTO
+      - FALLBACK
       - MANUAL
       - DIRECT
 
   - name: AUTO
     type: url-test
-    url: https://www.gstatic.com/generate_204
+    url: http://cp.cloudflare.com/generate_204
     lazy: true
-    initial: 0
-    interval: 1200
-    tolerance: 50
+    interval: 300
+    tolerance: 100
+    timeout: 2000
+    max-failed-times: 3
     use:
       - SUB
 
   - name: 0.1x_AUTO
     type: url-test
-    url: https://www.gstatic.com/generate_204
+    url: http://cp.cloudflare.com/generate_204
     lazy: true
-    initial: 0
-    interval: 1200
-    tolerance: 50
+    interval: 300
+    tolerance: 100
+    timeout: 2000
+    max-failed-times: 3
     use:
       - SUB
     filter: "(?i)0\\.1\\s*x|0\\.1\\s*倍|0\\.1\\s*倍率"
 
   - name: HK_AUTO
     type: url-test
-    url: https://www.gstatic.com/generate_204
+    url: http://cp.cloudflare.com/generate_204
     lazy: true
-    initial: 0
-    interval: 1200
-    tolerance: 50
+    interval: 300
+    tolerance: 100
+    timeout: 2000
+    max-failed-times: 3
     use:
       - SUB
     filter: "(?i)香港|HK|Hong Kong"
 
   - name: JP_AUTO
     type: url-test
-    url: https://www.gstatic.com/generate_204
+    url: http://cp.cloudflare.com/generate_204
     lazy: true
-    initial: 0
-    interval: 1200
-    tolerance: 50
+    interval: 300
+    tolerance: 100
+    timeout: 2000
+    max-failed-times: 3
     use:
       - SUB
     filter: "(?i)日本|JP|Japan"
 
   - name: SG_AUTO
     type: url-test
-    url: https://www.gstatic.com/generate_204
+    url: http://cp.cloudflare.com/generate_204
     lazy: true
-    initial: 0
-    interval: 1200
-    tolerance: 50
+    interval: 300
+    tolerance: 100
+    timeout: 2000
+    max-failed-times: 3
     use:
       - SUB
     filter: "(?i)新加坡|狮城|SG|Singapore"
 
   - name: USA_AUTO
     type: url-test
-    url: https://www.gstatic.com/generate_204
+    url: http://cp.cloudflare.com/generate_204
     lazy: true
-    initial: 0
-    interval: 1200
-    tolerance: 50
+    interval: 300
+    tolerance: 100
+    timeout: 2000
+    max-failed-times: 3
     use:
       - SUB
     filter: "(?i)美国|US|United States"
 
   - name: MANUAL
     type: select
+    use:
+      - SUB
+
+  - name: FALLBACK
+    type: fallback
+    url: http://cp.cloudflare.com/generate_204
+    interval: 120
+    timeout: 2000
+    lazy: true
     use:
       - SUB
 
@@ -231,35 +252,35 @@ rule-providers:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/proxy.list
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/proxy.list
     path: ./ruleset/yanren-proxy.list
     interval: 3600
   yanren-direct:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/direct.list
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/direct.list
     path: ./ruleset/yanren-direct.list
     interval: 3600
   yanren-private-ip:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/private-ip.list
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/private-ip.list
     path: ./ruleset/yanren-private-ip.list
     interval: 3600
   yanren-private:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/private.list
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/private.list
     path: ./ruleset/yanren-private.list
     interval: 3600
   yanren-reject:
     type: http
     behavior: classical
     format: text
-    url: https://ghfast.top/github.com/Yanren1225/rules/raw/main/reject.list
+    url: https://cdn.jsdelivr.net/gh/Yanren1225/rules@main/reject.list
     path: ./ruleset/yanren-reject.list
     interval: 3600
 
@@ -268,68 +289,68 @@ rule-providers:
     behavior: domain
     format: mrs
     path: ./ruleset/cn.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/cn.mrs"
     interval: 86400
   cn-ip:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/cnip.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/cnip.mrs"
     interval: 86400
   game-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/games-cn.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/games-cn.mrs"
     interval: 86400
   apple-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/apple-cn.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/apple-cn.mrs"
     interval: 86400
   proxy:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/proxy.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/proxy.mrs"
     interval: 86400
   microsoft-cn:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/microsoft-cn.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/microsoft-cn.mrs"
     interval: 86400
   telegram:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/telegramip.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/telegramip.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/telegramip.mrs"
     interval: 86400
   fakeip-filter:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/fakeip-filter.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/fakeip-filter.mrs"
     interval: 86400
   private-ip:
     type: http
     behavior: ipcidr
     format: mrs
     path: ./ruleset/private-ip.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/privateip.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/privateip.mrs"
     interval: 86400
   private:
     type: http
     behavior: domain
     format: mrs
     path: ./ruleset/private.mrs
-    url: "https://ghfast.top/github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/private.mrs"
+    url: "https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/private.mrs"
     interval: 86400
