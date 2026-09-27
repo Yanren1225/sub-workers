@@ -197,7 +197,7 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)美国|US|United States"
+    filter: "(?i)美国|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
 
   - name: MANUAL
     type: select
