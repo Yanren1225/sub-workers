@@ -29,7 +29,7 @@ tun:
   auto-detect-interface: true
   dns-hijack:
     - any:53
-  strict-route: true
+  strict-route: false
   mtu: 1500
   gso: true
   gso-max-size: 65536
@@ -50,7 +50,7 @@ tun:
 dns:
   enable: true
   ipv6: true
-  listen: ":53"
+  listen: 127.0.0.1:53
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
@@ -109,7 +109,7 @@ proxy-providers:
       enable: true
       lazy: true
       interval: 600
-      url: http://cp.cloudflare.com/generate_204
+      url: https://cp.cloudflare.com/generate_204
     proxy: DIRECT
     url: "__SUB_URL__"
     path: ./provider_sub.yaml
@@ -130,22 +130,22 @@ proxy-groups:
 
   - name: AUTO
     type: url-test
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     lazy: true
     interval: 300
     tolerance: 100
-    timeout: 2000
+    timeout: 3000
     max-failed-times: 3
     use:
       - SUB
 
   - name: 0.1x_AUTO
     type: url-test
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     lazy: true
     interval: 300
     tolerance: 100
-    timeout: 2000
+    timeout: 3000
     max-failed-times: 3
     use:
       - SUB
@@ -153,11 +153,11 @@ proxy-groups:
 
   - name: HK_AUTO
     type: url-test
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     lazy: true
     interval: 300
     tolerance: 100
-    timeout: 2000
+    timeout: 3000
     max-failed-times: 3
     use:
       - SUB
@@ -165,11 +165,11 @@ proxy-groups:
 
   - name: JP_AUTO
     type: url-test
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     lazy: true
     interval: 300
     tolerance: 100
-    timeout: 2000
+    timeout: 3000
     max-failed-times: 3
     use:
       - SUB
@@ -177,11 +177,11 @@ proxy-groups:
 
   - name: SG_AUTO
     type: url-test
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     lazy: true
     interval: 300
     tolerance: 100
-    timeout: 2000
+    timeout: 3000
     max-failed-times: 3
     use:
       - SUB
@@ -189,11 +189,11 @@ proxy-groups:
 
   - name: USA_AUTO
     type: url-test
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     lazy: true
     interval: 300
     tolerance: 100
-    timeout: 2000
+    timeout: 3000
     max-failed-times: 3
     use:
       - SUB
@@ -206,9 +206,9 @@ proxy-groups:
 
   - name: FALLBACK
     type: fallback
-    url: http://cp.cloudflare.com/generate_204
+    url: https://cp.cloudflare.com/generate_204
     interval: 120
-    timeout: 2000
+    timeout: 3000
     lazy: true
     use:
       - SUB
@@ -241,7 +241,7 @@ rules:
   - RULE-SET,game-cn,DIRECT
   - RULE-SET,apple-cn,DIRECT
   - RULE-SET,microsoft-cn,DIRECT
-  - RULE-SET,telegram,PROXY
+  - RULE-SET,telegram,PROXY,no-resolve
   - RULE-SET,proxy,PROXY
   # GEO IP
   - GEOIP,CN,DIRECT,no-resolve
