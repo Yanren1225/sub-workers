@@ -126,6 +126,7 @@ proxy-groups:
       - USA_AUTO
       - EU_AUTO
       - LOW_MULT
+      - HIGH_MULT
       - FALLBACK
       - MANUAL
       - DIRECT
@@ -152,6 +153,7 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇭🇰|香港|Hong Kong|(?<![A-Za-z])HK(?![A-Za-z])"
+    exclude-filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: JP_AUTO
     type: url-test
@@ -164,6 +166,7 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z])"
+    exclude-filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: KR_AUTO
     type: url-test
@@ -176,6 +179,7 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z])"
+    exclude-filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: SG_AUTO
     type: url-test
@@ -188,6 +192,7 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇸🇬|新加坡|狮城|Singapore|(?<![A-Za-z])SG(?![A-Za-z])"
+    exclude-filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: USA_AUTO
     type: url-test
@@ -200,6 +205,7 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
+    exclude-filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: EU_AUTO
     type: url-test
@@ -212,12 +218,19 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇩🇪|🇬🇧|德国|英国|法兰克福|伦敦|Frankfurt|London|United Kingdom|(?<![A-Za-z])DE(?![A-Za-z])|(?<![A-Za-z])UK(?![A-Za-z])"
+    exclude-filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: LOW_MULT
     type: select
     use:
       - SUB
     filter: "(?i)[×x]\\s*0\\.\\d+|0\\.\\d+\\s*[×x]|0\\.\\d+\\s*倍(?:率)?"
+
+  - name: HIGH_MULT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)(?:×\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![A-Za-z0-9])x\\s*[1-9]\\d*(?:\\.\\d+)?|(?<![\\d.])[1-9]\\d*(?:\\.\\d+)?\\s*倍(?:率)?)"
 
   - name: MANUAL
     type: select
