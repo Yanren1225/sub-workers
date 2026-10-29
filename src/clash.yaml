@@ -119,11 +119,13 @@ proxy-groups:
     type: select
     proxies:
       - AUTO
-      - 0.1x_AUTO
       - HK_AUTO
       - JP_AUTO
+      - KR_AUTO
       - SG_AUTO
       - USA_AUTO
+      - EU_AUTO
+      - LOW_MULT
       - FALLBACK
       - MANUAL
       - DIRECT
@@ -139,18 +141,6 @@ proxy-groups:
     use:
       - SUB
 
-  - name: 0.1x_AUTO
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)0\\.1\\s*x|0\\.1\\s*倍|0\\.1\\s*倍率"
-
   - name: HK_AUTO
     type: url-test
     url: https://cp.cloudflare.com/generate_204
@@ -161,7 +151,7 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)香港|HK|Hong Kong"
+    filter: "(?i)🇭🇰|香港|Hong Kong|(?<![A-Za-z])HK(?![A-Za-z])"
 
   - name: JP_AUTO
     type: url-test
@@ -173,7 +163,19 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)日本|JP|Japan"
+    filter: "(?i)🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z])"
+
+  - name: KR_AUTO
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    lazy: true
+    interval: 300
+    tolerance: 100
+    timeout: 3000
+    max-failed-times: 3
+    use:
+      - SUB
+    filter: "(?i)🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z])"
 
   - name: SG_AUTO
     type: url-test
@@ -185,7 +187,7 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)新加坡|狮城|SG|Singapore"
+    filter: "(?i)🇸🇬|新加坡|狮城|Singapore|(?<![A-Za-z])SG(?![A-Za-z])"
 
   - name: USA_AUTO
     type: url-test
@@ -197,7 +199,25 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)美国|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
+    filter: "(?i)🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
+
+  - name: EU_AUTO
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    lazy: true
+    interval: 300
+    tolerance: 100
+    timeout: 3000
+    max-failed-times: 3
+    use:
+      - SUB
+    filter: "(?i)🇩🇪|🇬🇧|德国|英国|法兰克福|伦敦|Frankfurt|London|United Kingdom|(?<![A-Za-z])DE(?![A-Za-z])|(?<![A-Za-z])UK(?![A-Za-z])"
+
+  - name: LOW_MULT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)[×x]\\s*0\\.\\d+|0\\.\\d+\\s*[×x]|0\\.\\d+\\s*倍(?:率)?"
 
   - name: MANUAL
     type: select
