@@ -119,6 +119,30 @@ proxy-groups:
     type: select
     proxies:
       - AUTO
+      - HK_OPT
+      - HK_OTHER
+      - TW_OPT
+      - TW_OTHER
+      - JP_OPT
+      - JP_OTHER
+      - KR_OPT
+      - KR_OTHER
+      - SG_OPT
+      - SG_OTHER
+      - USA_OPT
+      - USA_OTHER
+      - AU_OPT
+      - AU_OTHER
+      - DE_OPT
+      - DE_OTHER
+      - UK_OPT
+      - UK_OTHER
+      - IN_OPT
+      - IN_OTHER
+      - CA_OPT
+      - CA_OTHER
+      - ID_OPT
+      - ID_OTHER
       - HK_AUTO
       - JP_AUTO
       - KR_AUTO
@@ -141,6 +165,164 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
+
+  # 地区 × 线路档位：_OPT = 【优化】线路，_OTHER = 其余（普通/下载/流媒体）合并
+  # 空组会被 build-config 自动丢弃，同时从 PROXY 里移除
+  - name: HK_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇭🇰|香港|Hong Kong|(?<![A-Za-z])HK(?![A-Za-z]))"
+
+  - name: HK_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇭🇰|香港|Hong Kong|(?<![A-Za-z])HK(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: TW_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇹🇼|台湾|臺灣|台北|Taiwan|(?<![A-Za-z])TW(?![A-Za-z]))"
+
+  - name: TW_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇹🇼|台湾|臺灣|台北|Taiwan|(?<![A-Za-z])TW(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: JP_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z]))"
+
+  - name: JP_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: KR_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z]))"
+
+  - name: KR_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: SG_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇸🇬|新加坡|狮城|Singapore|(?<![A-Za-z])SG(?![A-Za-z]))"
+
+  - name: SG_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇸🇬|新加坡|狮城|Singapore|(?<![A-Za-z])SG(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: USA_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z]))"
+
+  - name: USA_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: AU_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇦🇺|澳大利亚|澳洲|悉尼|墨尔本|Australia|Sydney|(?<![A-Za-z])AU(?![A-Za-z]))"
+
+  - name: AU_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇦🇺|澳大利亚|澳洲|悉尼|墨尔本|Australia|Sydney|(?<![A-Za-z])AU(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: DE_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇩🇪|德国|法兰克福|Frankfurt|(?<![A-Za-z])DE(?![A-Za-z]))"
+
+  - name: DE_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇩🇪|德国|法兰克福|Frankfurt|(?<![A-Za-z])DE(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: UK_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇬🇧|英国|伦敦|London|United Kingdom|(?<![A-Za-z])UK(?![A-Za-z]))"
+
+  - name: UK_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇬🇧|英国|伦敦|London|United Kingdom|(?<![A-Za-z])UK(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: IN_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇮🇳|印度|孟买|新德里|India|Mumbai|(?<![A-Za-z])IN(?![A-Za-z]))"
+
+  - name: IN_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇮🇳|印度|孟买|新德里|India|Mumbai|(?<![A-Za-z])IN(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: CA_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇨🇦|加拿大|多伦多|温哥华|Canada|Toronto|(?<![A-Za-z])CA(?![A-Za-z]))"
+
+  - name: CA_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇨🇦|加拿大|多伦多|温哥华|Canada|Toronto|(?<![A-Za-z])CA(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: ID_OPT
+    type: select
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇮🇩|印尼|印度尼西亚|雅加达|Indonesia|Jakarta|(?<![A-Za-z])ID(?![A-Za-z]))"
+
+  - name: ID_OTHER
+    type: select
+    use:
+      - SUB
+    filter: "(?i)🇮🇩|印尼|印度尼西亚|雅加达|Indonesia|Jakarta|(?<![A-Za-z])ID(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
 
   - name: HK_AUTO
     type: url-test
