@@ -118,30 +118,30 @@ proxy-groups:
   - name: PROXY
     type: select
     proxies:
-      - AUTO
-      - AUTO_OPT
-      - AUTO_MIX
-      - HK_OPT
-      - HK_MIX
-      - TW_OPT
-      - TW_MIX
-      - JP_OPT
-      - JP_MIX
-      - KR_OPT
-      - KR_MIX
-      - SG_OPT
-      - SG_MIX
-      - USA_OPT
-      - USA_MIX
-      - EUR_OPT
-      - EUR_MIX
+      - 🌐 AUTO
+      - ⚡ AUTO_OPT
+      - 📦 AUTO_MIX
+      - 🇭🇰 HK_OPT
+      - 🇭🇰 HK_MIX
+      - 🇹🇼 TW_OPT
+      - 🇹🇼 TW_MIX
+      - 🇯🇵 JP_OPT
+      - 🇯🇵 JP_MIX
+      - 🇰🇷 KR_OPT
+      - 🇰🇷 KR_MIX
+      - 🇸🇬 SG_OPT
+      - 🇸🇬 SG_MIX
+      - 🇺🇸 USA_OPT
+      - 🇺🇸 USA_MIX
+      - 🇪🇺 EUR_OPT
+      - 🇪🇺 EUR_MIX
       - LOW_MULT
       - HIGH_MULT
       - FALLBACK
       - MANUAL
       - DIRECT
 
-  - name: AUTO
+  - name: 🌐 AUTO
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -155,7 +155,7 @@ proxy-groups:
   # 地区 × 线路档位：_OPT = 【优化】线路，_MIX = 其余（普通/下载/流媒体）合并
   # AUTO_OPT / AUTO_MIX 是全局两档；都是 url-test，空组由 build-config 自动丢弃
 
-  - name: AUTO_OPT
+  - name: ⚡ AUTO_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -167,7 +167,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】"
 
-  - name: AUTO_MIX
+  - name: 📦 AUTO_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -180,7 +180,7 @@ proxy-groups:
     filter: "(?i)."
     exclude-filter: "(?i)^【优化】"
 
-  - name: HK_OPT
+  - name: 🇭🇰 HK_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -192,7 +192,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇭🇰|香港|Hong Kong|(?<![A-Za-z])HK(?![A-Za-z]))"
 
-  - name: HK_MIX
+  - name: 🇭🇰 HK_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -205,7 +205,7 @@ proxy-groups:
     filter: "(?i)🇭🇰|香港|Hong Kong|(?<![A-Za-z])HK(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: TW_OPT
+  - name: 🇹🇼 TW_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -217,7 +217,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇹🇼|台湾|臺灣|台北|Taiwan|(?<![A-Za-z])TW(?![A-Za-z]))"
 
-  - name: TW_MIX
+  - name: 🇹🇼 TW_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -230,7 +230,7 @@ proxy-groups:
     filter: "(?i)🇹🇼|台湾|臺灣|台北|Taiwan|(?<![A-Za-z])TW(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: JP_OPT
+  - name: 🇯🇵 JP_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -242,7 +242,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z]))"
 
-  - name: JP_MIX
+  - name: 🇯🇵 JP_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -255,7 +255,7 @@ proxy-groups:
     filter: "(?i)🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: KR_OPT
+  - name: 🇰🇷 KR_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -267,7 +267,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z]))"
 
-  - name: KR_MIX
+  - name: 🇰🇷 KR_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -280,7 +280,7 @@ proxy-groups:
     filter: "(?i)🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: SG_OPT
+  - name: 🇸🇬 SG_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -292,7 +292,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇸🇬|新加坡|狮城|Singapore|(?<![A-Za-z])SG(?![A-Za-z]))"
 
-  - name: SG_MIX
+  - name: 🇸🇬 SG_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -305,7 +305,7 @@ proxy-groups:
     filter: "(?i)🇸🇬|新加坡|狮城|Singapore|(?<![A-Za-z])SG(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: USA_OPT
+  - name: 🇺🇸 USA_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -317,7 +317,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z]))"
 
-  - name: USA_MIX
+  - name: 🇺🇸 USA_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -330,7 +330,7 @@ proxy-groups:
     filter: "(?i)🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: EUR_OPT
+  - name: 🇪🇺 EUR_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -342,7 +342,7 @@ proxy-groups:
       - SUB
     filter: "(?i)^【优化】.*(?:🇩🇪|🇬🇧|德国|英国|法兰克福|伦敦|Frankfurt|London|United Kingdom|(?<![A-Za-z])DE(?![A-Za-z])|(?<![A-Za-z])UK(?![A-Za-z]))"
 
-  - name: EUR_MIX
+  - name: 🇪🇺 EUR_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
