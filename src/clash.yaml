@@ -127,6 +127,8 @@ proxy-groups:
       - TW_MIX
       - JP_OPT
       - JP_MIX
+      - KR_OPT
+      - KR_MIX
       - SG_OPT
       - SG_MIX
       - USA_OPT
@@ -251,6 +253,31 @@ proxy-groups:
     use:
       - SUB
     filter: "(?i)🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z])"
+    exclude-filter: "(?i)^【优化】"
+
+  - name: KR_OPT
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    lazy: true
+    interval: 300
+    tolerance: 100
+    timeout: 3000
+    max-failed-times: 3
+    use:
+      - SUB
+    filter: "(?i)^【优化】.*(?:🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z]))"
+
+  - name: KR_MIX
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    lazy: true
+    interval: 300
+    tolerance: 100
+    timeout: 3000
+    max-failed-times: 3
+    use:
+      - SUB
+    filter: "(?i)🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
   - name: SG_OPT
