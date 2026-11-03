@@ -119,30 +119,20 @@ proxy-groups:
     type: select
     proxies:
       - AUTO
+      - AUTO_OPT
+      - AUTO_MIX
       - HK_OPT
       - HK_MIX
       - TW_OPT
       - TW_MIX
       - JP_OPT
       - JP_MIX
-      - KR_OPT
-      - KR_MIX
       - SG_OPT
       - SG_MIX
       - USA_OPT
       - USA_MIX
-      - AU_OPT
-      - AU_MIX
-      - DE_OPT
-      - DE_MIX
-      - UK_OPT
-      - UK_MIX
-      - IN_OPT
-      - IN_MIX
-      - CA_OPT
-      - CA_MIX
-      - ID_OPT
-      - ID_MIX
+      - EUR_OPT
+      - EUR_MIX
       - LOW_MULT
       - HIGH_MULT
       - FALLBACK
@@ -161,7 +151,32 @@ proxy-groups:
       - SUB
 
   # 地区 × 线路档位：_OPT = 【优化】线路，_MIX = 其余（普通/下载/流媒体）合并
-  # 都是 url-test 自动选最快；空组会被 build-config 自动丢弃，同时从 PROXY 里移除
+  # AUTO_OPT / AUTO_MIX 是全局两档；都是 url-test，空组由 build-config 自动丢弃
+
+  - name: AUTO_OPT
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    lazy: true
+    interval: 300
+    tolerance: 100
+    timeout: 3000
+    max-failed-times: 3
+    use:
+      - SUB
+    filter: "(?i)^【优化】"
+
+  - name: AUTO_MIX
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    lazy: true
+    interval: 300
+    tolerance: 100
+    timeout: 3000
+    max-failed-times: 3
+    use:
+      - SUB
+    filter: "(?i)."
+    exclude-filter: "(?i)^【优化】"
 
   - name: HK_OPT
     type: url-test
@@ -238,31 +253,6 @@ proxy-groups:
     filter: "(?i)🇯🇵|日本|东京|大阪|Tokyo|Osaka|Japan|(?<![A-Za-z])JP(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: KR_OPT
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)^【优化】.*(?:🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z]))"
-
-  - name: KR_MIX
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)🇰🇷|韩国|首尔|Seoul|Korea|(?<![A-Za-z])KR(?![A-Za-z])"
-    exclude-filter: "(?i)^【优化】"
-
   - name: SG_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
@@ -313,7 +303,7 @@ proxy-groups:
     filter: "(?i)🇺🇸|美国|旧金山|洛杉矶|纽约|西雅图|圣何塞|达拉斯|United States|USA|(?<![A-Za-z])US(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
-  - name: AU_OPT
+  - name: EUR_OPT
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -323,9 +313,9 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)^【优化】.*(?:🇦🇺|澳大利亚|澳洲|悉尼|墨尔本|Australia|Sydney|(?<![A-Za-z])AU(?![A-Za-z]))"
+    filter: "(?i)^【优化】.*(?:🇩🇪|🇬🇧|德国|英国|法兰克福|伦敦|Frankfurt|London|United Kingdom|(?<![A-Za-z])DE(?![A-Za-z])|(?<![A-Za-z])UK(?![A-Za-z]))"
 
-  - name: AU_MIX
+  - name: EUR_MIX
     type: url-test
     url: https://cp.cloudflare.com/generate_204
     lazy: true
@@ -335,132 +325,7 @@ proxy-groups:
     max-failed-times: 3
     use:
       - SUB
-    filter: "(?i)🇦🇺|澳大利亚|澳洲|悉尼|墨尔本|Australia|Sydney|(?<![A-Za-z])AU(?![A-Za-z])"
-    exclude-filter: "(?i)^【优化】"
-
-  - name: DE_OPT
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)^【优化】.*(?:🇩🇪|德国|法兰克福|Frankfurt|(?<![A-Za-z])DE(?![A-Za-z]))"
-
-  - name: DE_MIX
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)🇩🇪|德国|法兰克福|Frankfurt|(?<![A-Za-z])DE(?![A-Za-z])"
-    exclude-filter: "(?i)^【优化】"
-
-  - name: UK_OPT
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)^【优化】.*(?:🇬🇧|英国|伦敦|London|United Kingdom|(?<![A-Za-z])UK(?![A-Za-z]))"
-
-  - name: UK_MIX
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)🇬🇧|英国|伦敦|London|United Kingdom|(?<![A-Za-z])UK(?![A-Za-z])"
-    exclude-filter: "(?i)^【优化】"
-
-  - name: IN_OPT
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)^【优化】.*(?:🇮🇳|印度|孟买|新德里|India|Mumbai|(?<![A-Za-z])IN(?![A-Za-z]))"
-
-  - name: IN_MIX
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)🇮🇳|印度|孟买|新德里|India|Mumbai|(?<![A-Za-z])IN(?![A-Za-z])"
-    exclude-filter: "(?i)^【优化】"
-
-  - name: CA_OPT
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)^【优化】.*(?:🇨🇦|加拿大|多伦多|温哥华|Canada|Toronto|(?<![A-Za-z])CA(?![A-Za-z]))"
-
-  - name: CA_MIX
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)🇨🇦|加拿大|多伦多|温哥华|Canada|Toronto|(?<![A-Za-z])CA(?![A-Za-z])"
-    exclude-filter: "(?i)^【优化】"
-
-  - name: ID_OPT
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)^【优化】.*(?:🇮🇩|印尼|印度尼西亚|雅加达|Indonesia|Jakarta|(?<![A-Za-z])ID(?![A-Za-z]))"
-
-  - name: ID_MIX
-    type: url-test
-    url: https://cp.cloudflare.com/generate_204
-    lazy: true
-    interval: 300
-    tolerance: 100
-    timeout: 3000
-    max-failed-times: 3
-    use:
-      - SUB
-    filter: "(?i)🇮🇩|印尼|印度尼西亚|雅加达|Indonesia|Jakarta|(?<![A-Za-z])ID(?![A-Za-z])"
+    filter: "(?i)🇩🇪|🇬🇧|德国|英国|法兰克福|伦敦|Frankfurt|London|United Kingdom|(?<![A-Za-z])DE(?![A-Za-z])|(?<![A-Za-z])UK(?![A-Za-z])"
     exclude-filter: "(?i)^【优化】"
 
   - name: LOW_MULT
