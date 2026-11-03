@@ -260,6 +260,12 @@ proxy-groups:
       - DIRECT
 
 rules:
+  # Google Play：下载 CDN 走国内节点，必须直连（实测直连 8MB/s，走代理 0 速度）；
+  # play.googleapis.com / android.clients.google.com 是控制面，必须代理
+  - DOMAIN-SUFFIX,xn--ngstr-lra8j.com,DIRECT
+  - DOMAIN-SUFFIX,xn--ngstr-cn-8za9o.com,DIRECT
+  - DOMAIN-SUFFIX,play.googleapis.com,PROXY
+  - DOMAIN-SUFFIX,android.clients.google.com,PROXY
   # 自用规则
   - RULE-SET,yanren-private,DIRECT
   - RULE-SET,yanren-private-ip,DIRECT,no-resolve
